@@ -1,14 +1,14 @@
-import { Controller, Get, Post, Req, Param, Body} from '@nestjs/common';
+import { Controller, Get, Post, Req, Param, Body, Inject} from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { Request } from 'express';
 import { CreateCatDto } from './dot/create-cat.dto';
 
 
-
 /* cats.controller.ts */
 @Controller('cats')
 export class CatsController {
-  constructor(private readonly catService: CatsService) {}
+  constructor(private readonly catService: CatsService,
+  ) {}
 
   @Get('/')
   getAllCats(@Req() request: Request): object {

@@ -60,7 +60,6 @@ export class UserController {
 
   @Get()
   findAll(@Query() query) {
-    console.log(query)
     return {
       code: 200,
       message: query.name
