@@ -6,7 +6,8 @@ import {Request, Response, NextFunction} from 'express'
 import * as cors from 'cors'
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-import { ResponseData } from './config/reseponse'
+import { ResponseData } from './common/reseponse'
+import { HttpFilter } from './common/filter'
 
 // 全局白名单跳转，token健全等
 // const whiteList = ['/v1/user', '/upload/album', '/upload/export']
@@ -39,6 +40,7 @@ async function bootstrap() {
     }
   }))
   // app.use(globalMiddleWare)
+  app.useGlobalFilters(new HttpFilter())
   app.useGlobalInterceptors(new ResponseData())
   await app.listen(5000);
 }
