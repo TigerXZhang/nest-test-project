@@ -1,13 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { VersioningType} from '@nestjs/common'
 import * as session from 'express-session'
-import {Request, Response, NextFunction} from 'express'
+// import {Request, Response, NextFunction} from 'express'
 import * as cors from 'cors'
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { ResponseData } from './common/reseponse'
 import { HttpFilter } from './common/filter'
+import { VersioningType, ValidationPipe} from '@nestjs/common'
 
 // 全局白名单跳转，token健全等
 // const whiteList = ['/v1/user', '/upload/album', '/upload/export']
@@ -22,9 +22,11 @@ import { HttpFilter } from './common/filter'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  // 配置静态文件路径
   app.useStaticAssets(join(__dirname,'images'),{
     prefix: '/tiger'
   })
+  // 解决浏览器跨域
   app.use(cors())
   // 配置版本信息，user controller.ts配置
   app.enableVersioning({
@@ -42,6 +44,7 @@ async function bootstrap() {
   // app.use(globalMiddleWare)
   app.useGlobalFilters(new HttpFilter())
   app.useGlobalInterceptors(new ResponseData())
+  app.useGlobalPipes(new ValidationPipe())
   await app.listen(5000);
 }
 bootstrap();
