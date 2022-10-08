@@ -5,11 +5,13 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { request } from 'http';
 import * as svgCaptche from 'svg-captcha'
 import { sign } from 'crypto';
+import { ApiTags,ApiBearerAuth, ApiQuery, ApiResponse, ApiOperation,ApiParam } from '@nestjs/swagger';
 
 @Controller({
   path: 'user',
   version: '1'
 })
+@ApiTags('User Api')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -31,7 +33,7 @@ export class UserController {
     }
   }
 
-  @Post('create')
+  @Post()
   createUser(@Body() body, @Session() session) {
     console.log(body, session.code)
     if (body?.code.toLocaleLowerCase() === session.code.toLocaleLowerCase()) {
@@ -47,31 +49,20 @@ export class UserController {
     }
   }
 
-  @Post()
-  create(@Body() body: CreateUserDto) {
-    console.log(body)
-    return {
-      code :200,
-      message: body.name,
-      age: body.age
-    }
-    // return this.userService.create(createUserDto);
-  }
-
   @Get()
+  @ApiOperation({summary: 'user list 接口',description: '列表描述接口'})
+  @ApiQuery({name: 'page', description: '分页信息'})
   findAll(@Query() query) {
     return {
       code: 200,
       message: query.name
     }
     // return this.userService.findAll();
-
   }
 
   @Get(':id')
+  @ApiParam({name: 'id', description: '用户id', required:true,type:Number})
   findOne(@Param('id') id: string, @Headers() headers) {
-    console.log(headers);
-    console.log(id)
     return {
       code: 200,
       message: this.userService.findOne(+id)

@@ -3,8 +3,10 @@ import { LoginService } from './login.service';
 import { CreateLoginDto } from './dto/create-login.dto';
 import { UpdateLoginDto } from './dto/update-login.dto';
 // import { LoginPipe } from './login.pipe';
+import { ApiTags,ApiBearerAuth, ApiQuery, ApiResponse, ApiOperation,ApiParam } from '@nestjs/swagger';
 
 @Controller('login')
+@ApiTags('Login Api')
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 

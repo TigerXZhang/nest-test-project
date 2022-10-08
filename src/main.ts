@@ -8,6 +8,7 @@ import { join } from 'path';
 import { ResponseData } from './common/reseponse'
 import { HttpFilter } from './common/filter'
 import { VersioningType, ValidationPipe} from '@nestjs/common'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 
 // 全局白名单跳转，token健全等
 // const whiteList = ['/v1/user', '/upload/album', '/upload/export']
@@ -45,6 +46,10 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpFilter())
   app.useGlobalInterceptors(new ResponseData())
   app.useGlobalPipes(new ValidationPipe())
+
+  const options = new DocumentBuilder().setTitle('Tiger Test Api').setDescription('本地测试api').setVersion('1').build()
+  const document = SwaggerModule.createDocument(app, options)
+  SwaggerModule.setup('/api-docs',app,document)
   await app.listen(5000);
 }
 bootstrap();
