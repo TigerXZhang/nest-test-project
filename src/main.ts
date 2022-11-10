@@ -6,7 +6,7 @@ import * as cors from 'cors'
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { ResponseData } from './common/reseponse'
-import { HttpFilter } from './common/filter'
+import { HttpFilter } from './common/httpExceptionFilter'
 import { VersioningType, ValidationPipe} from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 

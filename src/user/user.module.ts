@@ -2,8 +2,10 @@ import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/c
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { Logger } from '../middleware/index'
+import { HttpModule } from '@nestjs/axios'
 
 @Module({
+  imports: [HttpModule],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService]

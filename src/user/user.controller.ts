@@ -6,14 +6,16 @@ import { request } from 'http';
 import * as svgCaptche from 'svg-captcha'
 import { sign } from 'crypto';
 import { ApiTags,ApiBearerAuth, ApiQuery, ApiResponse, ApiOperation,ApiParam } from '@nestjs/swagger';
-
+import { Observable } from 'rxjs';
 @Controller({
   path: 'user',
   version: '1'
 })
 @ApiTags('User Api')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService
+  ){}
 
   @Get('code')
   creatCode(@Req() req, @Res() res, @Session() session){
@@ -31,6 +33,12 @@ export class UserController {
       code: 200,
       data: Captche,
     }
+  }
+
+  @Post('token')
+  gettoken(@Body() body) {
+    const res = this.userService.getToken()
+    console.log('token res',res);
   }
 
   @Post()

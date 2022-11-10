@@ -14,7 +14,7 @@ export class HttpFilter implements ExceptionFilter{
         reseponse.status(status).json({
             success: false,
             time: new Date(),
-            data:exception.message,
+            data: exception.message,
             status,
             path: request.url
         })
