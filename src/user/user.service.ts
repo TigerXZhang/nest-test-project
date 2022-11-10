@@ -10,9 +10,13 @@ export class UserService {
   ){}
 
   getToken(){
-    return this.httpService.post('https://cnshaappuwv751.asia.pwcinternal.com/AppCenterAPIs/app/gettoken', {
+    this.httpService.post('https://cnshaappuwv751.asia.pwcinternal.com/AppCenterAPIs/app/gettoken', {
       "AppCode":"tdhpro",
       "AppSecret":"BMwNOUWFw4Kf0emvUwLp5kFrV82uAQgaVAXrzqFXjfxlCY94A9YY9od5URqwLG7C"
+    },{
+      headers:{
+        'Content-Type': 'application/json;charset=utf-8'
+      },
     })
   }
 
