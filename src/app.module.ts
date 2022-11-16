@@ -6,9 +6,17 @@ import { UserModule } from './user/user.module';
 import { UploadModule } from './upload/upload.module';
 import { LoginModule } from './login/login.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { HttpModule } from '@nestjs/axios'
+import { Agent } from 'https';
+
+const http_module = HttpModule.register({
+  httpsAgent: new Agent({
+    rejectUnauthorized: false,
+  }),
+});
 
 @Module({
-  imports: [CatsModule, UserModule, UploadModule, LoginModule,
+  imports: [CatsModule, UserModule, UploadModule, LoginModule,http_module,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',

@@ -36,9 +36,16 @@ export class UserController {
   }
 
   @Post('token')
-  gettoken(@Body() body) {
-    const res = this.userService.getToken()
-    console.log('token res',res);
+  async gettoken(@Body() body, @Headers() headers) {
+    const params = {
+      userloginaccount: body.userloginaccount, 
+      password: body.password, 
+      appcode: body.appcode
+    }
+    const authorization = headers.authorization
+    const res = await this.userService.getToken(params, authorization)
+    console.log(res);
+    return res.data.Data
   }
 
   @Post()

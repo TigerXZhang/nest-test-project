@@ -50,6 +50,6 @@ async function bootstrap() {
   const options = new DocumentBuilder().setTitle('Tiger Test Api').setDescription('本地测试api').setVersion('1').build()
   const document = SwaggerModule.createDocument(app, options)
   SwaggerModule.setup('/api-docs',app,document)
-  await app.listen(5000);
+  await app.listen(9000);
 }
 bootstrap();
