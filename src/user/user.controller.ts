@@ -7,6 +7,9 @@ import * as svgCaptche from 'svg-captcha'
 import { sign } from 'crypto';
 import { ApiTags,ApiBearerAuth, ApiQuery, ApiResponse, ApiOperation,ApiParam } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
+import { UrlDecode, Decrypt } from './utils'
+
+
 @Controller({
   path: 'user',
   version: '1'
@@ -34,6 +37,12 @@ export class UserController {
       data: Captche,
     }
   }
+  @Post('appcenterToken')
+  async getAppcenterToken(@Body() body, @Headers() headers) {
+    const res = await this.userService.getAppcenterToken()
+    console.log('getAppcenterToken',res);
+    return res.data.Data
+  }
 
   @Post('token')
   async gettoken(@Body() body, @Headers() headers) {
@@ -45,6 +54,23 @@ export class UserController {
     const authorization = headers.authorization
     const res = await this.userService.getToken(params, authorization)
     console.log(res);
+    return res.data.Data
+  }
+
+  @Post('getUserByHashCode')
+  async getUserByHashCode(@Body() body) {
+    const params = {
+      "ticket": body.ticket
+    }
+    
+    const res = await this.userService.getUserInfo(params)
+    console.log('res',res);
+    
+    // const hashCode = body.hashCode
+    // const decodedToken = UrlDecode(hashCode);
+    // const CryptoKey = 'VGY&%TYUIsJJG**&^%^%%589~asdas-=';
+    // console.log(decodedToken.length);
+    // const hashcodeInfo = Decrypt(decodedToken, CryptoKey);
     return res.data.Data
   }
 

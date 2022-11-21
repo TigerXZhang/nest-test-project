@@ -8,15 +8,26 @@ import { LoginModule } from './login/login.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HttpModule } from '@nestjs/axios'
 import { Agent } from 'https';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 const http_module = HttpModule.register({
   httpsAgent: new Agent({
     rejectUnauthorized: false,
   }),
 });
+const envConfigPath = {
+  dev: `.env.development`, // dev环境配置
+  uat: `.env.uat`, // uat环境配置
+  prod: `.env.production`, // prod环境配置
+};
+const config_module = ConfigModule.forRoot({
+  envFilePath: `.env.development`,
+  isGlobal: true,
+  cache: true,
+});
 
 @Module({
-  imports: [CatsModule, UserModule, UploadModule, LoginModule,http_module,
+  imports: [CatsModule, UserModule, UploadModule, LoginModule,http_module,config_module,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
