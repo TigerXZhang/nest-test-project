@@ -57,20 +57,23 @@ export class UserController {
     return res.data.Data
   }
 
+  @Post('decodeToken')
+  decodeToken(@Body() body) {
+    const hashCode = body.hashCode
+    const decodedToken = UrlDecode(hashCode);
+    const CryptoKey = 'VGY&%TYUIsJJG**&^%^%%589~asdas-=';
+;
+    const hashcodeInfo = Decrypt(decodedToken, CryptoKey);
+
+    return hashcodeInfo
+  }
+
   @Post('getUserByHashCode')
   async getUserByHashCode(@Body() body) {
     const params = {
       "ticket": body.ticket
     }
-    
     const res = await this.userService.getUserInfo(params)
-    console.log('res',res);
-    
-    // const hashCode = body.hashCode
-    // const decodedToken = UrlDecode(hashCode);
-    // const CryptoKey = 'VGY&%TYUIsJJG**&^%^%%589~asdas-=';
-    // console.log(decodedToken.length);
-    // const hashcodeInfo = Decrypt(decodedToken, CryptoKey);
     return res.data.Data
   }
 

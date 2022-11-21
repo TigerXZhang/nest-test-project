@@ -1,4 +1,6 @@
 import * as crypto from 'crypto';
+let fs = require("fs");
+
 
 export function UrlDecode(zipStr){ 
     var uzipStr = ''; 
@@ -31,40 +33,27 @@ export function UrlDecode(zipStr){
     return String.fromCharCode(asccode); 
   }
 
-  export function Decrypt(str:string, encryptkey:string)
+  export function Decrypt(decodeStr:string, encryptkey:string)
   {
-      if (!str)
-      {
-        return '';
-      }
-      if (!encryptkey)
-      {
-        encryptkey = "VGY&%TYUIsJJG**&^%^%%589~asdas-=";
-      }
-      str = str.replace(' ', '+');
+      const strBuf = Buffer.from(decodeStr, 'base64');//base64 
 
-      try {
-        const iv = '0';
-        encryptkey = encryptkey
-        const buffer = Buffer.from(str).slice(16, 32)
-        console.log('iv',buffer);
-        
-        // let iv = '0';
-        const algorithm = 'aes-256-cbc';
-        const decipher = crypto.createDecipheriv(algorithm, encryptkey, buffer);
-        const decrpyted = Buffer.concat([decipher.update(str, 'base64'), decipher.final()]);
-        return decrpyted.toString();
+      const salt = strBuf.slice(0,8);
+      //var auth = strBuf.slice(8,16);
+      console.log('salt',salt);
+      const iv = strBuf.slice(16,32);
+      console.log('iv',iv);
 
-        // let key = encryptkey;
-        // let iv = '1012132405963708';
-        // var cipherChunks = [];
-        // var decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
-        // decipher.setAutoPadding(true);
-        // cipherChunks.push(decipher.update(str, 'base64', 'utf8'));
-        // cipherChunks.push(decipher.final('utf8'));
-        // return cipherChunks.join('');
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
+      const nodeCrypto = crypto.pbkdf2Sync(Buffer.from(encryptkey), Buffer.from(salt), 10000, 32, 'sha1');
+      //var authKey = crypto.pbkdf2Sync(Buffer.from(password), Buffer.from(auth), 10000, 32, 'sha1');
+      console.log(nodeCrypto,'nodeCrypto');
+      //console.log(authKey.length);
+      
+      const decBuf = strBuf.slice(32, strBuf.length -32);
+      const decipher = crypto.createDecipheriv('aes-256-cbc', nodeCrypto, iv);
+      
+      const decrypted = decipher.update(decBuf);
+      //decrypted += decipher.final('hex');
+      console.log(decrypted,'decrypted');
+      console.log(decrypted.toString("utf8"));
+      return decrypted.toString("utf8")
   }
