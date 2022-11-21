@@ -8,7 +8,7 @@ import { sign } from 'crypto';
 import { ApiTags,ApiBearerAuth, ApiQuery, ApiResponse, ApiOperation,ApiParam } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
 import { UrlDecode, Decrypt } from './utils'
-
+import { ConfigService } from '@nestjs/config';
 
 @Controller({
   path: 'user',
@@ -17,7 +17,8 @@ import { UrlDecode, Decrypt } from './utils'
 @ApiTags('User Api')
 export class UserController {
   constructor(
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private configService: ConfigService,
   ){}
 
   @Get('code')
@@ -44,7 +45,7 @@ export class UserController {
     return res.data.Data
   }
 
-  @Post('token')
+  @Post('getMobileSsoToken')
   async gettoken(@Body() body, @Headers() headers) {
     const params = {
       userloginaccount: body.userloginaccount, 
@@ -53,17 +54,18 @@ export class UserController {
     }
     const authorization = headers.authorization
     const res = await this.userService.getToken(params, authorization)
-    console.log(res);
+    console.log('getMobileSsoToken', res);
     return res.data.Data
   }
-
+  // 解析token 获取 ticket|staffID|时间戳
   @Post('decodeToken')
   decodeToken(@Body() body) {
+    const cryptoKey = this.configService.get<string>('cryptoKey')
+    
     const hashCode = body.hashCode
     const decodedToken = UrlDecode(hashCode);
-    const CryptoKey = 'VGY&%TYUIsJJG**&^%^%%589~asdas-=';
-;
-    const hashcodeInfo = Decrypt(decodedToken, CryptoKey);
+
+    const hashcodeInfo = Decrypt(decodedToken, cryptoKey);
 
     return hashcodeInfo
   }
@@ -75,6 +77,14 @@ export class UserController {
     }
     const res = await this.userService.getUserInfo(params)
     return res.data.Data
+  }
+
+  @Post('getUserInfoByID')
+  async getUserInfoByID() {
+    const res = await this.userService.getUserInfoByID('0732')
+    console.log('getUserInfoByID',res);
+    
+    return res
   }
 
   @Post()

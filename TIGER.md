@@ -38,3 +38,8 @@ userid 请求接口
 参考github
 https://cnshautmplv024.asia.pwcinternal.com/ycai040/Mobile-Open-API/blob/master/PwC.MobileOpenAPI.Services/Services/AppCenterService.cs
 
+appcenter 链接信息
+data source=CNSHASQLUWV725,1800;initial catalog=PwCAppCenter;user id=alex ml ma;password=pass1234;Connection Timeout=2000;TrustServerCertificate=true;
+
+
+dbeaber

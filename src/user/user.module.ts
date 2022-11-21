@@ -3,11 +3,14 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { Logger } from '../middleware/index'
 import { HttpModule } from '@nestjs/axios'
+import { Users } from './entities/user.entity'
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [HttpModule],
+  imports: [HttpModule, TypeOrmModule.forFeature([Users],'appcenter')],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService,ConfigService],
   exports: [UserService]
 })
 
