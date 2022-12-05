@@ -6,15 +6,9 @@ import { UserModule } from './user/user.module';
 import { UploadModule } from './upload/upload.module';
 import { LoginModule } from './login/login.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HttpModule } from '@nestjs/axios'
-import { Agent } from 'https';
+
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-const http_module = HttpModule.register({
-  httpsAgent: new Agent({
-    rejectUnauthorized: false,
-  }),
-});
 const envConfigPath = {
   dev: `.env.development`, // dev环境配置
   uat: `.env.uat`, // uat环境配置
@@ -74,7 +68,7 @@ const appcenter_module = TypeOrmModule.forRootAsync({
 });
 
 @Module({
-  imports: [CatsModule, UserModule, UploadModule, LoginModule, http_module, config_module, data_module, appcenter_module],
+  imports: [CatsModule, UserModule, UploadModule, LoginModule, config_module, data_module, appcenter_module],
   controllers: [AppController],
   providers: [AppService]
 })

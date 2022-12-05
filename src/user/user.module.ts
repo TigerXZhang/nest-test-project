@@ -2,13 +2,20 @@ import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/c
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { Logger } from '../middleware/index'
-import { HttpModule } from '@nestjs/axios'
 import { Users } from './entities/user.entity'
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios'
+import { Agent } from 'https';
+
+const http_module = HttpModule.register({
+  httpsAgent: new Agent({
+    rejectUnauthorized: false,
+  }),
+})
 
 @Module({
-  imports: [HttpModule, TypeOrmModule.forFeature([Users],'appcenter')],
+  imports: [TypeOrmModule.forFeature([Users],'appcenter'),http_module],
   controllers: [UserController],
   providers: [UserService,ConfigService],
   exports: [UserService]

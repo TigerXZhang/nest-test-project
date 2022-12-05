@@ -16,20 +16,16 @@ export class UserService {
     @InjectRepository(Users,'appcenter') private users: Repository<Users>,
   ){}
   
-  async getAppcenterToken(){
+   getAppcenterToken(){
     const appCenterAPI = this.configService.get<string>('appCenterAPI')
     console.log(appCenterAPI);
-    try {
-      const response1: any = await lastValueFrom(
-        this.httpService.post(appCenterAPI + '/app/gettoken', {
-          AppCode:"tdhpro",
-          AppSecret:"BMwNOUWFw4Kf0emvUwLp5kFrV82uAQgaVAXrzqFXjfxlCY94A9YY9od5URqwLG7C"
-        })
-      );
-      return response1
-    }catch(err){
-      console.log('err',err);
-    }
+    const response: any = lastValueFrom(
+      this.httpService.post(appCenterAPI + '/app/gettoken', {
+        AppCode:"tdhpro",
+        AppSecret:"BMwNOUWFw4Kf0emvUwLp5kFrV82uAQgaVAXrzqFXjfxlCY94A9YY9od5URqwLG7C"
+      })
+    );
+    return response
   }
   // 获取手机端sso token 数据
   async getToken(params, authorization){
